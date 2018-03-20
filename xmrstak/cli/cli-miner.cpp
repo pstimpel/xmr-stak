@@ -102,7 +102,8 @@ void help()
 	cout<<" \n"<<endl;
 #endif
 	cout<< "Version: " << get_version_str_short() << endl;
-	cout<<"Brought to by fireice_uk and psychocrypt under GPLv3."<<endl;
+	cout<<"Slightly adapted by pstimpel, under GPLv3."<<endl;
+	cout<<"Forked from fireice_uk and psychocrypt under GPLv3."<<endl;
 }
 
 bool read_yes_no(const char* str)
@@ -560,7 +561,8 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 	printer::inst()->print_str(get_version_str_short().c_str());
 	printer::inst()->print_str("\n\n");
-	printer::inst()->print_str("Brought to you by fireice_uk and psychocrypt under GPLv3.\n");
+	printer::inst()->print_str("Slightly adapted by pstimpel, under GPLv3.\n");
+	printer::inst()->print_str("Forked from fireice_uk and psychocrypt under GPLv3.\n");
 	printer::inst()->print_str("Based on CPU mining code by wolf9466 (heavily optimized by fireice_uk).\n");
 #ifndef CONF_NO_CUDA
 	printer::inst()->print_str("Based on NVIDIA mining code by KlausT and psychocrypt.\n");
@@ -571,6 +573,15 @@ int main(int argc, char *argv[])
 	char buffer[64];
 	snprintf(buffer, sizeof(buffer), "\nConfigurable dev donation level is set to %.1f%%\n\n", fDevDonationLevel * 100.0);
 	printer::inst()->print_str(buffer);
+	printer::inst()->print_str("*******************************************************************\n");
+	printer::inst()->print_str("* Donation set to zero by pstimpel, to meet requirements of \n");
+	printer::inst()->print_str("* ----> bit.ly/snowdenangels <----\n");
+	printer::inst()->print_str("* Please consider donations to fireice-uk and psychocrypt\n");
+	printer::inst()->print_str("* by sending XMR to their Monero wallets\n");
+	printer::inst()->print_str("* NVIDIA stuff disabled\n");
+	printer::inst()->print_str("* OPENCL stuff disabled\n");
+	printer::inst()->print_str("* XML for total hashrate added\n");
+	printer::inst()->print_str("*******************************************************************\n");
 	printer::inst()->print_str("You can use following keys to display reports:\n");
 	printer::inst()->print_str("'h' - hashrate\n");
 	printer::inst()->print_str("'r' - results\n");
