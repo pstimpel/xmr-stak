@@ -634,6 +634,7 @@ void executor::ex_main()
 			break;
 
 		case EV_HTML_HASHRATE:
+		case EV_HTML_HASHRATEXML:
 		case EV_HTML_RESULTS:
 		case EV_HTML_CONNSTAT:
 		case EV_HTML_JSON:
@@ -1025,6 +1026,44 @@ void executor::http_hashrate_report(std::string& out)
 	out.append(buffer);
 }
 
+void executor::http_hashrate_total(std::string& out)
+{
+	char num_a[32], num_b[32];
+	char buffer[4096];
+	size_t nthd = pvThreads->size();
+
+	out.reserve(4096);
+
+	double fTotal[2] = { 0.0, 0.0 };
+	for(size_t i=0; i < nthd; i++)
+	{
+		double fHps[2];
+
+		fHps[0] = telem->calc_telemetry_data(60000, i);
+		fHps[1] = telem->calc_telemetry_data(10000, i);
+
+		num_a[0] = num_b[0] = '\0';
+
+		hps_format(fHps[0], num_a, sizeof(num_a));
+		hps_format(fHps[1], num_b, sizeof(num_b));
+
+		fTotal[0] += fHps[0];
+		fTotal[1] += fHps[1];
+
+	}
+
+	num_a[0] = num_b[0] ='\0';
+	hps_format(fTotal[0], num_a, sizeof(num_a));
+	hps_format(fTotal[1], num_b, sizeof(num_b));
+
+	snprintf(buffer, sizeof(buffer), "<?xml version=\"1.0\" encoding=\"UTF-8\"?><data><total>%s</total>", num_a);
+	out.append(buffer);
+	snprintf(buffer, sizeof(buffer), "<total10>%s</total10>", num_b);
+	out.append(buffer);
+	snprintf(buffer, sizeof(buffer), "<version>%s</version></data>", get_version_str_short().c_str());
+	out.append(buffer);
+}
+
 void executor::http_result_report(std::string& out)
 {
 	char date[128];
@@ -1237,6 +1276,9 @@ void executor::http_report(ex_event_name ev)
 
 	switch(ev)
 	{
+	case EV_HTML_HASHRATEXML:
+		http_hashrate_total(*pHttpString);
+		break;
 	case EV_HTML_HASHRATE:
 		http_hashrate_report(*pHttpString);
 		break;
@@ -1267,7 +1309,7 @@ void executor::get_http_report(ex_event_name ev_id, std::string& data)
 
 	assert(pHttpString == nullptr);
 	assert(ev_id == EV_HTML_HASHRATE || ev_id == EV_HTML_RESULTS
-		|| ev_id == EV_HTML_CONNSTAT || ev_id == EV_HTML_JSON);
+		|| ev_id == EV_HTML_CONNSTAT || ev_id == EV_HTML_JSON || ev_id == EV_HTML_HASHRATEXML);
 
 	pHttpString = &data;
 	httpReady = std::promise<void>();
