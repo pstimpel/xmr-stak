@@ -563,7 +563,7 @@ void executor::ex_main()
 		else
 			pools.emplace_front(0, "donate.xmr-stak.net:5500", "", "", "", 0.0, true, false, "", false);
 		break;
-	
+	case cryptonight_aeon:
 	case cryptonight_lite:
 		if(dev_tls)
 			pools.emplace_front(0, "donate.xmr-stak.net:7777", "", "", "", 0.0, true, true, "", true);
@@ -1101,6 +1101,7 @@ void executor::http_hashrate_total(std::string& out)
     out.append(buffer);
 }
 
+
 void executor::http_result_report(std::string& out)
 {
 	char date[128];
@@ -1313,9 +1314,9 @@ void executor::http_report(ex_event_name ev)
 
 	switch(ev)
 	{
-	case EV_HTML_HASHRATEXML:
-		http_hashrate_total(*pHttpString);
-		break;
+    case EV_HTML_HASHRATEXML:
+        http_hashrate_total(*pHttpString);
+        break;
 
 	case EV_HTML_HASHRATE:
 		http_hashrate_report(*pHttpString);
@@ -1347,7 +1348,7 @@ void executor::get_http_report(ex_event_name ev_id, std::string& data)
 
 	assert(pHttpString == nullptr);
 	assert(ev_id == EV_HTML_HASHRATE || ev_id == EV_HTML_RESULTS
-		|| ev_id == EV_HTML_CONNSTAT || ev_id == EV_HTML_JSON || ev_id == EV_HTML_HASHRATEXML);
+        || ev_id == EV_HTML_CONNSTAT || ev_id == EV_HTML_JSON || ev_id == EV_HTML_HASHRATEXML);
 
 	pHttpString = &data;
 	httpReady = std::promise<void>();

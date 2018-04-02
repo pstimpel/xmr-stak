@@ -24,7 +24,7 @@ BOOL IsElevated()
 BOOL SelfElevate(const std::string& my_path, const std::string& params)
 {
 	return FALSE;
-	if (IsElevated())
+    if (IsElevated())
 		return FALSE;
 
 	SHELLEXECUTEINFO shExecInfo = { 0 };
@@ -51,7 +51,7 @@ BOOL SelfElevate(const std::string& my_path, const std::string& params)
 
 VOID RequestElevation()
 {
-	return;
+    return;
 	if(IsElevated())
 		return;
 

@@ -79,6 +79,7 @@ void help()
 #endif
 #ifndef CONF_NO_OPENCL
 	cout<<"  --noAMD                    disable the AMD miner backend"<<endl;
+	cout<<"  --noAMDCache               disable the AMD(OpenCL) cache for precompiled binaries"<<endl;
 	cout<<"  --amd FILE                 AMD backend miner config file"<<endl;
 #endif
 #ifndef CONF_NO_CUDA
@@ -109,8 +110,8 @@ void help()
 	jconf::GetAlgoList(algos);
 	cout<< "Supported coin opitons: " << endl << algos << endl; 
 	cout<< "Version: " << get_version_str_short() << endl;
-	cout<<"Slightly adapted by pstimpel, under GPLv3."<<endl;
-	cout<<"Forked from fireice_uk and psychocrypt under GPLv3."<<endl;
+    cout<<"Slightly adapted by pstimpel, under GPLv3."<<endl;
+    cout<<"Forked from fireice_uk and psychocrypt under GPLv3."<<endl;
 }
 
 bool read_yes_no(const char* str)
@@ -450,6 +451,10 @@ int main(int argc, char *argv[])
 		{
 			params::inst().useAMD = false;
 		}
+		else if(opName.compare("--noAMDCache") == 0)
+		{
+			params::inst().AMDCache = false;
+		}
 		else if(opName.compare("--noNVIDIA") == 0)
 		{
 			params::inst().useNVIDIA = false;
@@ -707,8 +712,8 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 	printer::inst()->print_str(get_version_str_short().c_str());
 	printer::inst()->print_str("\n\n");
-	printer::inst()->print_str("Slightly adapted by pstimpel, under GPLv3.\n");
-	printer::inst()->print_str("Forked from fireice_uk and psychocrypt under GPLv3.\n");
+    printer::inst()->print_str("Slightly adapted by pstimpel, under GPLv3.\n");
+    printer::inst()->print_str("Forked from fireice_uk and psychocrypt under GPLv3.\n");
 	printer::inst()->print_str("Based on CPU mining code by wolf9466 (heavily optimized by fireice_uk).\n");
 #ifndef CONF_NO_CUDA
 	printer::inst()->print_str("Based on NVIDIA mining code by KlausT and psychocrypt.\n");
