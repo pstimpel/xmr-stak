@@ -238,8 +238,8 @@ void win_exit(int code)
 }
 
 #else
-void win_exit(int code) 
-{ 
+void win_exit(int code)
+{
 	std::exit(code);
 }
 #endif // _WIN32

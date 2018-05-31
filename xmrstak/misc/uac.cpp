@@ -5,11 +5,11 @@
 #include <string>
 #include <windows.h>
 
-BOOL IsElevated() 
+BOOL IsElevated()
 {
 	BOOL fRet = FALSE;
 	HANDLE hToken = NULL;
-	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) 
+	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
 	{
 		TOKEN_ELEVATION Elevation;
 		DWORD cbSize = sizeof(TOKEN_ELEVATION);
@@ -23,8 +23,8 @@ BOOL IsElevated()
 
 BOOL SelfElevate(const std::string& my_path, const std::string& params)
 {
-	return FALSE;
-    if (IsElevated())
+    return FALSE;
+	if (IsElevated())
 		return FALSE;
 
 	SHELLEXECUTEINFO shExecInfo = { 0 };
