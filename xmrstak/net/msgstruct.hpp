@@ -1,5 +1,7 @@
 #pragma once
 
+#include "xmrstak/backend/cryptonight.hpp"
+
 #include <string>
 #include <string.h>
 #include <assert.h>
@@ -31,9 +33,11 @@ struct job_result
 	char		sJobID[64];
 	uint32_t	iNonce;
 	uint32_t	iThreadId;
+	xmrstak_algo algorithm = invalid_algo;
 
 	job_result() {}
-	job_result(const char* sJobID, uint32_t iNonce, const uint8_t* bResult, uint32_t iThreadId) : iNonce(iNonce), iThreadId(iThreadId)
+	job_result(const char* sJobID, uint32_t iNonce, const uint8_t* bResult, uint32_t iThreadId, xmrstak_algo algo) :
+		iNonce(iNonce), iThreadId(iThreadId), algorithm(algo)
 	{
 		memcpy(this->sJobID, sJobID, sizeof(job_result::sJobID));
 		memcpy(this->bResult, bResult, sizeof(job_result::bResult));
@@ -74,7 +78,7 @@ struct gpu_res_err
 enum ex_event_name { EV_INVALID_VAL, EV_SOCK_READY, EV_SOCK_ERROR, EV_GPU_RES_ERROR,
 	EV_POOL_HAVE_JOB, EV_MINER_HAVE_RESULT, EV_PERF_TICK, EV_EVAL_POOL_CHOICE,
 	EV_USR_HASHRATE, EV_USR_RESULTS, EV_USR_CONNSTAT, EV_HASHRATE_LOOP,
-	EV_HTML_HASHRATE, EV_HTML_RESULTS, EV_HTML_CONNSTAT, EV_HTML_JSON, EV_HTML_HASHRATEXML };
+    EV_HTML_HASHRATE, EV_HTML_RESULTS, EV_HTML_CONNSTAT, EV_HTML_JSON, EV_HTML_HASHRATEXML };
 
 /*
    This is how I learned to stop worrying and love c++11 =).
