@@ -1,18 +1,17 @@
-rem "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsMSBuildCmd.bat"
-cd c:\xmr-stak
-
+set XMR_SDIR=c:\xmr-stak
+set BUILDDIR=%XMR_SDIR%\build
+set MSVS_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community
+set Path=C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\Wbem;C:\Windows\system32;C:\Windows
+cd %BUILDDIR%
+set INCLUDE=
+set LIBPATH=
+set LIB=
+call "%MSVS_PATH%\Common7\Tools\VsMSBuildCmd.bat"
+cd %BUILDDIR%
 set CMAKE_PREFIX_PATH=C:\xmr-stak-dep\hwloc;C:\xmr-stak-dep\libmicrohttpd;C:\xmr-stak-dep\openssl
-rem set(CMAKE_PREFIX_PATH C:\\xmr-stak-dep\\hwloc;C:\\xmr-stak-dep\\libmicrohttpd;C:\\xmr-stak-dep\\openssl)
-mkdir build
-cd build
-
-rem use 141 with depv2, should be ok since there is no collision when not using the GPU stuff
-cmake -G "Visual Studio 15 2017 Win64" -T v141,host=x64 -DCUDA_ENABLE=OFF -DOpenCL_ENABLE=OFF ..
-
-rem use 140 with depv1
-rem cmake -G "Visual Studio 15 2017 Win64" -T v140,host=x64 -DCUDA_ENABLE=OFF -DOpenCL_ENABLE=OFF ..
-
-cmake --build . --config Release --target install
+cmake -G "Visual Studio 15 2017 Win64" -T v141,host=x64 -DCMAKE_BUILD_TYPE=Release -DCUDA_ENABLE=OFF -DOpenCL_ENABLE=OFF %XMR_SDIR%
+cmake --build "%BUILDDIR%" --config Release --target clean
+cmake --build "%BUILDDIR%" --config Release --target install
 cd bin\Release
 copy C:\xmr-stak-dep\openssl\bin\* .
 pause
