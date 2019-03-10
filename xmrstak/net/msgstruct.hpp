@@ -16,6 +16,7 @@ struct pool_job
 	uint64_t	iTarget;
 	uint32_t	iWorkLen;
 	uint32_t	iSavedNonce;
+	uint64_t	iBlockHeight = uint64_t(-1);
 
 	pool_job() : iWorkLen(0), iSavedNonce(0) {}
 	pool_job(const char* sJobID, uint64_t iTarget, const uint8_t* bWorkBlob, uint32_t iWorkLen) :
@@ -33,10 +34,10 @@ struct job_result
 	char		sJobID[64];
 	uint32_t	iNonce;
 	uint32_t	iThreadId;
-	xmrstak_algo algorithm = invalid_algo;
+	xmrstak_algo algorithm = {invalid_algo};
 
 	job_result() {}
-	job_result(const char* sJobID, uint32_t iNonce, const uint8_t* bResult, uint32_t iThreadId, xmrstak_algo algo) :
+	job_result(const char* sJobID, uint32_t iNonce, const uint8_t* bResult, uint32_t iThreadId, const xmrstak_algo& algo) :
 		iNonce(iNonce), iThreadId(iThreadId), algorithm(algo)
 	{
 		memcpy(this->sJobID, sJobID, sizeof(job_result::sJobID));
@@ -78,7 +79,7 @@ struct gpu_res_err
 enum ex_event_name { EV_INVALID_VAL, EV_SOCK_READY, EV_SOCK_ERROR, EV_GPU_RES_ERROR,
 	EV_POOL_HAVE_JOB, EV_MINER_HAVE_RESULT, EV_PERF_TICK, EV_EVAL_POOL_CHOICE,
 	EV_USR_HASHRATE, EV_USR_RESULTS, EV_USR_CONNSTAT, EV_HASHRATE_LOOP,
-    EV_HTML_HASHRATE, EV_HTML_RESULTS, EV_HTML_CONNSTAT, EV_HTML_JSON, EV_HTML_HASHRATEXML };
+	EV_HTML_HASHRATE, EV_HTML_HASHRATEXML, EV_HTML_RESULTS, EV_HTML_CONNSTAT, EV_HTML_JSON };
 
 /*
    This is how I learned to stop worrying and love c++11 =).
@@ -174,6 +175,10 @@ struct ex_event
 			oSocketError.~sock_err();
 	}
 };
+
+inline uint64_t t32_to_t64(uint32_t t) { return 0xFFFFFFFFFFFFFFFFULL / (0xFFFFFFFFULL / ((uint64_t)t)); }
+inline uint64_t t64_to_diff(uint64_t t) { return 0xFFFFFFFFFFFFFFFFULL / t; }
+inline uint64_t diff_to_t64(uint64_t d) { return 0xFFFFFFFFFFFFFFFFULL / d; }
 
 #include <chrono>
 //Get steady_clock timestamp - misc helper function

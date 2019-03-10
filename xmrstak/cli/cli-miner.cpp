@@ -773,7 +773,7 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str(get_version_str_short().c_str());
 	printer::inst()->print_str("\n\n");
     printer::inst()->print_str("Slightly adapted by pstimpel, under GPLv3.\n");
-    printer::inst()->print_str("Forked from fireice_uk and psychocrypt under GPLv3.\n");
+    printer::inst()->print_str("Forked from fireice_uk and psychocrypt under GPLv3.\n");	
 	printer::inst()->print_str("Based on CPU mining code by wolf9466 (heavily optimized by fireice_uk).\n");
 #ifndef CONF_NO_CUDA
 	printer::inst()->print_str("Based on NVIDIA mining code by KlausT and psychocrypt.\n");
@@ -783,7 +783,7 @@ int main(int argc, char *argv[])
 #endif
 	char buffer[64];
 	snprintf(buffer, sizeof(buffer), "\nConfigurable dev donation level is set to %.1f%%\n\n", fDevDonationLevel * 100.0);
-    printer::inst()->print_str("*******************************************************************\n");
+	printer::inst()->print_str("*******************************************************************\n");
     printer::inst()->print_str("* Donation set to zero by pstimpel, to meet requirements of \n");
     printer::inst()->print_str("* ----> bit.ly/snowdenangels <----\n");
     printer::inst()->print_str("* Please consider donations to fireice-uk and psychocrypt\n");
@@ -811,7 +811,7 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str("This currency is a way for us to implement the ideas that we were unable to in\n");
 	printer::inst()->print_str("Monero. See https://github.com/fireice-uk/cryptonote-speedup-demo for details.\n");
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
-	printer::inst()->print_msg(L0, "Mining coin: %s", jconf::inst()->GetMiningCoin().c_str());
+	printer::inst()->print_msg(L0, "Mining coin: %s", ::jconf::inst()->GetCurrentCoinSelection().GetDescription(1).GetMiningAlgo().Name().c_str());
 
 	if(params::inst().benchmark_block_version >= 0)
 	{
@@ -875,13 +875,12 @@ int do_benchmark(int block_version, int wait_sec, int work_sec)
 	/* AMD and NVIDIA is currently only supporting work sizes up to 84byte
 	 * \todo fix this issue
 	 */
-	xmrstak::miner_work benchWork = xmrstak::miner_work("", work, 84, 0, false, 0);
 	printer::inst()->print_msg(L0, "Start a %d second benchmark...",work_sec);
-	xmrstak::globalStates::inst().switch_work(benchWork, dat);
+	xmrstak::globalStates::inst().switch_work(xmrstak::miner_work("", work, 84, 0, false, 0, 0), dat);
 	uint64_t iStartStamp = get_timestamp_ms();
 
 	std::this_thread::sleep_for(std::chrono::seconds(work_sec));
-	xmrstak::globalStates::inst().switch_work(oWork, dat);
+	xmrstak::globalStates::inst().switch_work(xmrstak::miner_work("", work, 84, 0, false, 0, 0), dat);
 
 	double fTotalHps = 0.0;
 	for (uint32_t i = 0; i < pvThreads->size(); i++)
